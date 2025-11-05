@@ -2,8 +2,10 @@ package com.todoapp.todo_backend.model;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 public class Account {
@@ -18,6 +20,7 @@ public class Account {
   private String email;
 
   @Column(nullable = false)
+  @JsonIgnore
   private String passwordHash;
 
   private LocalDateTime createdAt;
@@ -25,11 +28,11 @@ public class Account {
 
   @OneToMany(mappedBy = "account")
   @JsonManagedReference
-  private List<Task> tasks;
+  private Set<Task> tasks = new HashSet<>();
 
   @OneToMany(mappedBy = "account")
   @JsonManagedReference
-  private List<TaskComment> comments;
+  private Set<TaskComment> comments = new HashSet<>();
 
   // Getters and setters
 
@@ -81,19 +84,19 @@ public class Account {
     this.updatedAt = updatedAt;
   }
 
-  public List<Task> getTasks() {
+  public Set<Task> getTasks() {
     return tasks;
   }
 
-  public void setTasks(List<Task> tasks) {
+  public void setTasks(Set<Task> tasks) {
     this.tasks = tasks;
   }
 
-  public List<TaskComment> getComments() {
+  public Set<TaskComment> getComments() {
     return comments;
   }
 
-  public void setComments(List<TaskComment> comments) {
+  public void setComments(Set<TaskComment> comments) {
     this.comments = comments;
   }
 
@@ -101,7 +104,7 @@ public class Account {
   }
 
   public Account(Long id, String username, String email, String passwordHash, LocalDateTime createdAt,
-      LocalDateTime updatedAt, List<Task> tasks, List<TaskComment> comments) {
+      LocalDateTime updatedAt, Set<Task> tasks, Set<TaskComment> comments) {
     this.id = id;
     this.username = username;
     this.email = email;

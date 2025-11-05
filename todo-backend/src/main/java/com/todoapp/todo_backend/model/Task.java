@@ -3,6 +3,7 @@ package com.todoapp.todo_backend.model;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,10 +35,12 @@ public class Task {
 
     @OneToMany(mappedBy = "task")
     @JsonManagedReference
+    @JsonIgnore
     private List<TaskTagMap> tagMaps;
 
     @OneToMany(mappedBy = "task")
     @JsonManagedReference
+    @JsonIgnore
     private List<TaskComment> comments;
 
     public Long getId() {
