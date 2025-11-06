@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Box,
   TextField,
@@ -10,36 +11,36 @@ import {
 import Link from 'next/link'
 import api from '../lib/api'
 
-type Account = {
-  id: number
+type LoginResponse = {
+  token: string
   username: string
-  email: string
-  passwordHash: string
+  message: string
 }
 
 export default function LoginForm() {
+  const router = useRouter()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
 
-  // Lưu ý: backend hiện chưa có API login thực sự, chỉ demo gọi API get account
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setSuccess('')
     setLoading(true)
     try {
-      // Giả lập login: tìm account theo username (hoặc email)
-      const resp = await api.post<Account[]>('/api/accounts/all')
-      const accounts: Account[] = Array.isArray(resp.data) ? resp.data : []
-      const found = accounts.find(
-        (acc) => acc.username === username && acc.passwordHash === password
-      )
-      if (found) {
-        setSuccess('Đăng nhập thành công!')
-        // TODO: lưu session/token nếu backend có
+      const resp = await api.post<LoginResponse>('/api/accounts/auth/login', {
+        username,
+        password,
+      })
+      const data = resp.data as LoginResponse
+      if (data && data.token) {
+        setSuccess(data.message || 'Đăng nhập thành công!')
+        setTimeout(() => {
+          router.push('/home')
+        }, 1000)
       } else {
         setError('Sai username hoặc password')
       }
@@ -49,6 +50,7 @@ export default function LoginForm() {
       setLoading(false)
     }
   }
+
   return (
     <Box
       sx={{

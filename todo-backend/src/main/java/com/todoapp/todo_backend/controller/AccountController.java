@@ -8,6 +8,7 @@ import com.todoapp.todo_backend.dto.LoginRequestDTO;
 import com.todoapp.todo_backend.dto.RegisterRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,11 +59,11 @@ public class AccountController {
 
   @PostMapping("/auth/login")
   public AuthResponseDTO login(@RequestBody LoginRequestDTO loginRequest) {
-      return accountService.login(loginRequest);
+    return accountService.login(loginRequest);
   }
 
   @PostMapping("/auth/register")
   public AuthResponseDTO register(@RequestBody RegisterRequestDTO registerRequest) {
-      return accountService.register(registerRequest);
+    return accountService.register(registerRequest);
   }
 }

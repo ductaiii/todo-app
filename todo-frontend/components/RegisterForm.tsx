@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Box, TextField, Button, Typography, Alert } from '@mui/material'
 import { Link as MuiLink } from '@mui/material'
 import Link from 'next/link'
 import api from '../lib/api'
 
 export default function RegisterForm() {
+  const router = useRouter()
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -23,16 +25,19 @@ export default function RegisterForm() {
     }
     setLoading(true)
     try {
-      await api.post('/api/accounts', {
+      await api.post('/api/accounts/auth/register', {
         username,
         email,
-        passwordHash: password,
+        password,
       })
       setSuccess('Đăng ký thành công!')
       setUsername('')
       setEmail('')
       setPassword('')
       setConfirmPassword('')
+      setTimeout(() => {
+        router.push('/login')
+      }, 1200)
     } catch (err) {
       if (
         err &&

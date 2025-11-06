@@ -1,7 +1,6 @@
 package com.todoapp.todo_backend.model;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -26,12 +25,12 @@ public class Account {
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
-  @OneToMany(mappedBy = "account")
-  @JsonManagedReference
+  @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+  @JsonIgnore // tránh serialize collection khi trả về Account
   private Set<Task> tasks = new HashSet<>();
 
-  @OneToMany(mappedBy = "account")
-  @JsonManagedReference
+  @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+  @JsonIgnore // tránh serialize collection khi trả về Account
   private Set<TaskComment> comments = new HashSet<>();
 
   // Getters and setters
